@@ -1,0 +1,52 @@
+[tool.usage]
+name = "app"
+version = "0.1.0"
+description = "fastapi template"
+authors = ["hzjsea <hzjsea@gmail.com>"]
+
+[tool.version]
+version = "0.2"
+environment = "online"
+
+
+[dev]
+  [dev.db]
+  user_name = "root"
+  password = "root"
+  host = "127.0.0.1:3307"
+  database_name = "checkdb"
+  [dev.rdb]
+  redis_host = "127.0.0.1"
+  [dev.address]
+  download_url = "http://127.0.0.1:8000/api/chia/download"
+  [dev.sms]
+  sms_url = ""
+
+[produce]
+  [produce.db]
+  user_name = "root"
+  password = "root"
+  host = "db"
+  database_name = "checkdb"
+  [produce.rdb]
+  redis_host = "rdb"
+  [produce.address]
+  download_url = "https://chia.houdeyun.cn/api/chia/download"
+  [produce.sms]
+  sms_url = "http://holdon-notify.holdcloud:8080/sms"
+
+[online]
+   [online.db]
+   user_name = "user"
+   password = "password"
+   host = "db"
+   # host = "112.13.110.172:3306"
+   database_name = "checkdb"
+   [online.rdb]
+   redis_host = "rdb"
+   [online.address]
+   download_url = "http://10.0.5.119:8000/api/chia/download"
+   [online.sms]
+   sms_url = ""
+
+
