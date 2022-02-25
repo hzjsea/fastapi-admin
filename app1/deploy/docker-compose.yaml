@@ -1,0 +1,57 @@
+version: "3.7"
+
+services:
+  db:
+    container_name: "db"
+    build: ./docker/mysql
+    restart: always
+    tty: true
+    environment:
+      MYSQL_DATABASE: checkdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./docker/mysql/initdb.d:/docker-entrypoint-initdb.d # 初始化sql脚本
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d             # mysql 配置脚本
+      - ./docker/mysql/data:/var/lib/mysql                  # mysql 数据
+    #      - ./docker/mysql/log:/var/log/mysql                   # 日志文件
+    #      - /etc/localtime:/etc/localtime:ro                    # 时间
+    #      - /etc/timezone:/etc/timezone:ro                      # 时间
+    networks:
+      - chia-net
+
+  rdb:
+    image: redis:alpine
+    restart: always
+    container_name: rdb
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./docker/redis/data:/data
+      - ./docker/redis/redis.config:/usr/local/etc/redis/redis.conf
+    command:
+      redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      - chia-net
+
+
+  api:
+    links:
+      - db
+      - rdb
+    tty: true
+    container_name: "api"
+    build: ./docker/api
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code/
+    networks:
+      - chia-net
+
+networks:
+  chia-net:
+    driver: bridge
